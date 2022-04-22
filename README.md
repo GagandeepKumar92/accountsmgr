@@ -1,3 +1,3 @@
 # accountsmgr
 
-This is the accounts manager.
+-This is the accounts manager.

@@ -1,0 +1,92 @@
+swagger: "2.0"
+info:
+  title: accountsmgr
+  version: 0.1.0
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /accounts:
+    post:
+      tags:
+        - createAccount
+      operationId: createAccount
+      parameters:
+       - name: body
+         in: body
+         required: true
+         schema:
+          $ref: "#/definitions/account"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/account"
+        400:
+          description: Name should be at least 3 characters long
+          schema:
+            $ref: "#/definitions/error"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  account:
+    type: object
+    required:
+      - name
+      - user_id
+    properties:
+      id:
+        type: string
+        title: account_id
+        description: This is the account id
+        readOnly: true
+      user_id:
+        type: integer
+        format: int32
+        title: user_id
+        description: This is the id of user
+        example: 1
+      name:
+        type: string
+        title: account_name
+        description: This is the account name
+        example: ABC
+        minLength: 3
+      user_name:
+        type: string
+        title: user_name
+        description: This is the name of user
+        example: ABC
+        readOnly: true
+      source:
+        enum: [ "openstack", "openshift", "aws"]
+        type: string
+        title: source
+        description: This is the source
+      created_at:
+        title: Created At
+        description: Timestamp when the account was created
+        type: string
+        format: date-time
+        readOnly: true    
+      updated_at:
+        title: Updated At
+        description: Timestamp when the user updated something
+        type: string
+        format: date-time
+        readOnly: true    
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string      
