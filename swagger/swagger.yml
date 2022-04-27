@@ -46,8 +46,7 @@ definitions:
         description: This is the account id
         readOnly: true
       user_id:
-        type: integer
-        format: int32
+        type: string
         title: user_id
         description: This is the id of user
         example: 1

@@ -119,8 +119,7 @@ func init() {
         },
         "user_id": {
           "description": "This is the id of user",
-          "type": "integer",
-          "format": "int32",
+          "type": "string",
           "title": "user_id",
           "example": 1
         },
@@ -252,8 +251,7 @@ func init() {
         },
         "user_id": {
           "description": "This is the id of user",
-          "type": "integer",
-          "format": "int32",
+          "type": "string",
           "title": "user_id",
           "example": 1
         },

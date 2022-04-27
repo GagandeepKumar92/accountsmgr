@@ -1,9 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"accountsmgr/db"
+
+	"accountsmgr/clients"
 
 	"accountsmgr/domain"
 
@@ -14,17 +17,47 @@ type mgr struct {
 	ds db.DataStore
 }
 
-func (m *mgr) CreateAccount(usr *domain.Account) *domain.Error {
+func (m *mgr) CreateAccount(acc *domain.Account) *domain.Error {
 
-	usr.CreatedAt = time.Now().UTC()
-	usr.UpdatedAt = time.Now().UTC()
-	usr.ID = ksuid.New().String()
+	res, err := clients.NewClientManager().FindUser()
 
-	/*if len(usr.Name) < 3 {
-		return &domain.Error{Code: 400, Message: "Name should be at least 3 characters long"}
+	/*if err != nil {
+		derr, ok := err.(domain.Err)
+		//fmt.Println("The typecasted Delete status from handler", derr.StatusCode())
+		if ok {
+			switch derr.StatusCode() {
+			//case 404:
+			//	return users.NewFindUsersParams().WithPayload(asErrorResponse(err.(*domain.Error)))
+			}
+		} else {
+			return users.NewFindUsersDefault(500).FindUsersDefault.Payload
+		}
 	}*/
 
-	m.ds.CreateAccount(usr)
+	if err != nil {
+		return &domain.Error{Code: 500, Message: "Internal Server Error"}
+	}
+
+	userName := ""
+	if len(res) > 0 {
+		for i := 0; i < len(res); i++ {
+			if res[i].ID == acc.UserID {
+				userName = *res[i].Name
+				fmt.Println("User name is ", userName)
+			}
+		}
+	}
+
+	if userName == "" {
+		return &domain.Error{Code: 400, Message: "User doesn't exist"}
+	}
+
+	acc.CreatedAt = time.Now().UTC()
+	acc.UpdatedAt = time.Now().UTC()
+	acc.ID = ksuid.New().String()
+	acc.UserName = userName
+
+	m.ds.CreateAccount(acc)
 	return nil
 
 }

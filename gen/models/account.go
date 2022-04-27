@@ -59,7 +59,7 @@ type Account struct {
 	// This is the id of user
 	// Example: 1
 	// Required: true
-	UserID *int32 `json:"user_id"`
+	UserID *string `json:"user_id"`
 
 	// user_name
 	//
